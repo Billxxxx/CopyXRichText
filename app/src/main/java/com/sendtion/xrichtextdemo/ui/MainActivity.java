@@ -2,6 +2,7 @@ package com.sendtion.xrichtextdemo.ui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.sendtion.xrichtext.entity.IImageGetEntity;
@@ -62,8 +66,24 @@ public class MainActivity extends BaseActivity {
 
         XRichTextImageInstance.getInstance().setIImageLoader(new IImageLoader() {
             @Override
-            public void loadImage(String path, ImageView imageView) {
-                Glide.with(MainActivity.this).load(path).crossFade().centerCrop().into(imageView);
+            public void loadImage(String path, final ImageView imageView) {
+//                imageView.setImageResource(android.R.drawable.arrow_down_float);
+                Glide.with(imageView.getContext()).load(path).crossFade().centerCrop().into(new SimpleTarget<GlideDrawable>() {
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                    }
+
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                        imageView.setImageDrawable(resource);
+                    }
+
+                    @Override
+                    public void onStop() {
+                        super.onStop();
+                    }
+                });
             }
         });
     }
