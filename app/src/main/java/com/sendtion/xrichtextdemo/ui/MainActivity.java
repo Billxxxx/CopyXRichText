@@ -18,7 +18,7 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.sendtion.xrichtext.entity.IImageGetEntity;
 import com.sendtion.xrichtext.entity.IImageLoader;
-import com.sendtion.xrichtext.instance.ImageInstance;
+import com.sendtion.xrichtext.instance.XRichTextImageInstance;
 import com.sendtion.xrichtextdemo.R;
 import com.sendtion.xrichtextdemo.adapter.MyNoteListAdapter;
 import com.sendtion.xrichtextdemo.bean.Note;
@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity {
 
         initView();
 
-        ImageInstance.getInstance().setEntity(new IImageGetEntity() {
+        XRichTextImageInstance.getInstance().setIImageGetEntity(new IImageGetEntity() {
             @Override
             public String getImagePath(Object object) {
                 if (object instanceof String)
@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        ImageInstance.getInstance().setIImageLoader(new IImageLoader() {
+        XRichTextImageInstance.getInstance().setIImageLoader(new IImageLoader() {
             @Override
             public void loadImage(String path, ImageView imageView) {
                 Glide.with(MainActivity.this).load(path).crossFade().centerCrop().into(imageView);

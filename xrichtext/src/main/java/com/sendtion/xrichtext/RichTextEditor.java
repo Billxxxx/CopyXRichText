@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-import com.sendtion.xrichtext.instance.ImageInstance;
+import com.sendtion.xrichtext.instance.XRichTextImageInstance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -254,7 +254,7 @@ public class RichTextEditor extends ScrollView {
         if (object instanceof String) {
             imagePath = (String) object;
         } else {
-            imagePath = ImageInstance.getInstance().getImagePath(object);
+            imagePath = XRichTextImageInstance.getInstance().getImagePath(object);
         }
         return imagePath;
     }
@@ -325,7 +325,7 @@ public class RichTextEditor extends ScrollView {
 
         String imagePath = getImagePath(data);
 
-        ImageInstance.getInstance().loadImage(imagePath, imageView);
+        XRichTextImageInstance.getInstance().loadImage(imagePath, imageView);
 //        Glide.with(getContext()).load(imagePath).crossFade().centerCrop().into(imageView);
         imageView.setData(data);//保留这句，后面保存数据会用
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);//裁剪剧中

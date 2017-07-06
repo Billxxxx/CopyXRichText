@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.sendtion.xrichtext.instance.ImageInstance;
+import com.sendtion.xrichtext.instance.XRichTextImageInstance;
 
 
 /**
@@ -121,7 +121,7 @@ public class RichTextView extends ScrollView {
         final RelativeLayout imageLayout = createImageLayout();
         DataImageView imageView = (DataImageView) imageLayout.findViewById(R.id.edit_imageView);
 
-        ImageInstance.getInstance().loadImage(imagePath, imageView);
+        XRichTextImageInstance.getInstance().loadImage(imagePath, imageView);
         imageView.setData(imagePath);
 
         // 调整imageView的高度
