@@ -115,6 +115,7 @@ public class NewActivity extends BaseActivity {
 
         et_new_title = (EditText) findViewById(R.id.et_new_title);
         et_new_content = (RichTextEditor) findViewById(R.id.et_new_content);
+        et_new_content.setHintText("请填写问题相关描述信息(选填)");
         tv_new_time = (TextView) findViewById(R.id.tv_new_time);
         tv_new_group = (TextView) findViewById(R.id.tv_new_group);
 

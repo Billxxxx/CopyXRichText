@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -62,7 +64,7 @@ public class RichTextEditor extends ScrollView {
 //        setupLayoutTransitions();
         LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT);
-        allLayout.setPadding(50, 15, 50, 15);//设置间距，防止生成图片时文字太靠边，不能用margin，否则有黑边
+//        allLayout.setPadding(50, 15, 50, 15);//设置间距，防止生成图片时文字太靠边，不能用margin，否则有黑边
         addView(allLayout, layoutParams);
 
         // 2. 初始化键盘退格监听
@@ -95,7 +97,7 @@ public class RichTextEditor extends ScrollView {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    lastFocusEdit = (EditText) v;
+                    setLastEdit((EditText) v);
                 }
             }
         };
@@ -105,8 +107,54 @@ public class RichTextEditor extends ScrollView {
         //editNormalPadding = dip2px(EDIT_PADDING);
         EditText firstEdit = createEditText("请输入内容", dip2px(context, EDIT_PADDING));
         allLayout.addView(firstEdit, firstEditParam);
-        lastFocusEdit = firstEdit;
+        setLastEdit(firstEdit);
     }
+
+    private void setLastEdit(EditText firstEdit) {
+        lastFocusEdit = firstEdit;
+        if (lastFocusEdit != null && textWatcher != null)
+            lastFocusEdit.addTextChangedListener(textWatcher);
+        setHintText();
+    }
+
+    TextWatcher textWatcher;
+
+    public void setTextWatcher(TextWatcher textWatcher) {
+        this.textWatcher = textWatcher;
+    }
+
+    public void setHintText(int textRes) {
+        hintText = getContext().getString(textRes);
+        setHintText();
+    }
+
+    public void setHintText(String text) {
+        hintText = text;
+        setHintText();
+    }
+
+    private void setHintText() {
+
+        if (allLayout == null)
+            return;
+        int count = allLayout.getChildCount();
+        boolean hasEdits = false;
+        boolean oneEdit = false;
+        for (int i = 0; i < count; i++) {
+            if (allLayout.getChildAt(i) instanceof EditText) {
+                if (oneEdit) {
+                    hasEdits = true;
+                    break;
+                }
+                oneEdit = true;
+            }
+        }
+        if (lastFocusEdit != null && !TextUtils.isEmpty(hintText))
+            if (!hasEdits)
+                lastFocusEdit.setHint(hintText);
+    }
+
+    String hintText = null;
 
     /**
      * 初始化transition动画
@@ -175,7 +223,7 @@ public class RichTextEditor extends ScrollView {
                     preEdit.setText(str2 + str1);
                     preEdit.requestFocus();
                     preEdit.setSelection(str2.length(), str2.length());
-                    lastFocusEdit = preEdit;
+                    setLastEdit(preEdit);
                 }
             }
         }
@@ -279,14 +327,14 @@ public class RichTextEditor extends ScrollView {
                 editStr2 = " ";
             }
             if (allLayout.getChildCount() - 1 == lastEditIndex) {
-                lastFocusEdit = addEditTextAtIndex(lastEditIndex + 1, editStr2);
+                setLastEdit(addEditTextAtIndex(lastEditIndex + 1, editStr2));
             }
 
             addImageViewAtIndex(lastEditIndex + 1, imagePath);
             lastFocusEdit.requestFocus();
 
             if (lastFocusEdit.getText().length() >= editStr1.length())
-                lastFocusEdit.setSelection(editStr1.length(), editStr1.length());//TODO
+                lastFocusEdit.setSelection(editStr1.length(), editStr1.length());
         }
         hideKeyBoard();
     }
@@ -307,13 +355,17 @@ public class RichTextEditor extends ScrollView {
      * @param editStr EditText显示的文字
      */
     public EditText addEditTextAtIndex(final int index, CharSequence editStr) {
-        EditText editText2 = createEditText("", EDIT_PADDING);
-        editText2.setText(editStr);
-        editText2.setOnFocusChangeListener(focusListener);
+        if (index == 0) {
+            lastFocusEdit.setText(editStr);
+            return lastFocusEdit;
+        } else {
+            EditText editText2 = createEditText("", EDIT_PADDING);
+            editText2.setText(editStr);
+            editText2.setOnFocusChangeListener(focusListener);
 
-        allLayout.addView(editText2, index);
-
-        return editText2;
+            allLayout.addView(editText2, index);
+            return editText2;
+        }
     }
 
     /**
