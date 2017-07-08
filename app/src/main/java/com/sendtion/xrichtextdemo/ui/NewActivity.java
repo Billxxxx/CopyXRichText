@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sendtion.xrichtext.RichTextEditor;
-import com.sendtion.xrichtext.SDCardUtil;
 import com.sendtion.xrichtextdemo.R;
 import com.sendtion.xrichtextdemo.bean.Group;
 import com.sendtion.xrichtextdemo.bean.Note;
@@ -24,6 +23,7 @@ import com.sendtion.xrichtextdemo.db.NoteDao;
 import com.sendtion.xrichtextdemo.util.CommonUtil;
 import com.sendtion.xrichtextdemo.util.DateUtils;
 import com.sendtion.xrichtextdemo.util.ImageUtils;
+import com.sendtion.xrichtextdemo.util.SDCardUtil;
 import com.sendtion.xrichtextdemo.util.ScreenUtils;
 import com.sendtion.xrichtextdemo.util.StringUtils;
 

@@ -238,13 +238,22 @@ public class RichTextEditor extends ScrollView {
     private void onImageCloseClick(View view) {
         disappearingImageIndex = allLayout.indexOfChild(view);
         //删除文件夹里的图片
-        List<EditData> dataList = buildEditData();
-        EditData editData = dataList.get(disappearingImageIndex);
+//        List<EditData> dataList = buildEditData();
+//        EditData editData = dataList.get(disappearingImageIndex);
         //Log.i("", "editData: "+editData);
-        if (editData.imagePath != null) {
-            SDCardUtil.deleteFile(getImagePath(editData.imagePath));
-        }
+//        if (editData.imagePath != null) {
+//            SDCardUtil.deleteFile(getImagePath(editData.imagePath));
+//        }
+        int position = allLayout.indexOfChild(view);
         allLayout.removeView(view);
+        if (allLayout.getChildCount() > position) {
+            View LastView = allLayout.getChildAt(position - 1);
+
+            if (LastView instanceof EditText && allLayout.getChildAt(position) instanceof EditText) {
+                ((EditText) LastView).setText(((EditText) LastView).getText() + "\n" + ((EditText) allLayout.getChildAt(position)).getText());
+                allLayout.removeView(allLayout.getChildAt(position));
+            }
+        }
     }
 
     public void clearAllLayout() {
